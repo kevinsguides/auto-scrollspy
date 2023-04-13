@@ -1,0 +1,20 @@
+<updates>
+    <update>
+      <name>Auto ScrollSpy</name>
+      <description></description>
+      <element>pkg_autoss</element>
+      <type>package</type>
+      <folder></folder>
+      <version>1.00</version>
+      <downloads>
+        <downloadurl type="full" format="">https://github.com/kevinsguides/yaquiz/releases/download/v0.3.55/com_yaquiz-0.3.55.zip</downloadurl>
+      </downloads>
+      <tags>
+        <tag>stable</tag>
+      </tags>
+      <maintainer>KevinsGuides</maintainer>
+      <maintainerurl>https://kevinsguides.com/</maintainerurl>
+      <section>Updates</section>
+      <targetplatform name="joomla" version=".*" />
+    </update>
+    </updates>
