@@ -13,6 +13,9 @@
 !modules/mod_autoscrollspy/
 !modules/mod_autoscrollspy/**
 
+!package-maker
+!package-maker/pkg_autoscrollspy.xml
+
 !.gitignore
 !readme.md
 !autossupdates.xml
