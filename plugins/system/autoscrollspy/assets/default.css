@@ -120,6 +120,16 @@ ul.autoss-nav ul li a {
   z-index: 1001;
   transition: all 0.3s ease;
 }
+.autoss-float-toggle.asscolors-dark.as-float-left {
+  border-radius: 0 10px 10px 0;
+}
+.autoss-float-toggle.asscolors-dark.as-float-right {
+  border-radius: 10px 0 10px 0;
+}
+.autoss-float-toggle i {
+  font-size: 2em;
+  padding: 5px;
+}
 
 .autoss-togglehidden {
   display: none;

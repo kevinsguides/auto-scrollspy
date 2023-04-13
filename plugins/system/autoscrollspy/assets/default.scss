@@ -137,6 +137,24 @@ ul.autoss-nav{
     cursor: pointer;
     z-index: 1001;
     transition: all 0.3s ease;
+    &.asscolors-dark{
+        &.as-float-left{
+            border-radius: 0 10px 10px 0;
+
+        }
+        &.as-float-right{
+            border-radius: 10px 0 10px 0;
+        }
+
+    } 
+
+    & i{
+        font-size: 2em;
+        padding: 5px;
+        
+    }
+
+
 }
 
 

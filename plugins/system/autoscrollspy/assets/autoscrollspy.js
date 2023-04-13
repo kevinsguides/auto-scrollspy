@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         //get the current scroll position
         var scrollPos = window.scrollY;
 
-        //offset by 50px
-        scrollPos += 50;
+        //offset by 100px
+        scrollPos += 100;
 
         //loop through the positions and find the one that is closest to the scroll position
         var closest = 0;

@@ -236,7 +236,9 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             $lang = JFactory::getLanguage();
             $lang->load('plg_system_autoscrollspy', JPATH_ADMINISTRATOR);
 
-            $toggleInnerHtml = JText::_('PLG_SYSTEM_AUTOSCROLLSPY_FLOATPANEL_COLLAPSETOGGLETEXT');
+            $toggletext = JText::_('PLG_SYSTEM_AUTOSCROLLSPY_FLOATPANEL_COLLAPSETOGGLETEXT');
+
+            $toggleInnerHtml = $toggletext;
 
 
 
@@ -256,9 +258,9 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
 
             if($floatpanel_position == 'left'){
-                $article = $article.'<div class="autoss-float-toggle as-float-left '.$colors.$usebtnclass.'">'.$toggleInnerHtml.'</div><div class="autoss-floatcontainer as-float-left '.$colors.'" style="'.$styles.'">'.$html.'</div>';
+                $article = $article.'<div class="autoss-float-toggle as-float-left '.$colors.$usebtnclass.'" title="'.$toggletext.'">'.$toggleInnerHtml.'</div><div class="autoss-floatcontainer as-float-left '.$colors.'" style="'.$styles.'">'.$html.'</div>';
             }else{
-                $article = $article. '<div class="autoss-float-toggle as-float-right '.$colors.$usebtnclass.'">'.$toggleInnerHtml.'</div><div class="autoss-floatcontainer as-float-right '.$colors.'"  style="'.$styles.'">'.$html.'</div>';
+                $article = $article. '<div class="autoss-float-toggle as-float-right '.$colors.$usebtnclass.'" title="'.$toggletext.'">'.$toggleInnerHtml.'</div><div class="autoss-floatcontainer as-float-right '.$colors.'"  style="'.$styles.'">'.$html.'</div>';
             }
         }
 

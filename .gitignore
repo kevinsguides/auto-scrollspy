@@ -6,6 +6,8 @@
 !plugins/system/
 !plugins/system/autoscrollspy/
 !plugins/system/autoscrollspy/**
+!scrollspy-docs/
+!scrollspy-docs/**
 
 !modules/
 !modules/mod_autoscrollspy/
