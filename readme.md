@@ -23,6 +23,9 @@ I know the acronym is A.S.S. That wasn't intentional but I'm too lazy to change 
 For best results
   * Use consistent heading structure
   * Don't use weird symbols or icons in headings
+  * Use on a template that includes bootstrap (should be most templates)
+  * Prefer module to the floating panel thing
+  * Avoid using on articles with over 10 or so headings, at that point you should probably turn your article into separate pages
 
 ![screenshot 1](https://raw.githubusercontent.com/kevinsguides/auto-scrollspy/main/scrollspy-docs/scrollspy1.png)
 ![screenshot 3](https://raw.githubusercontent.com/kevinsguides/auto-scrollspy/main/scrollspy-docs/scrollspy3.png)
