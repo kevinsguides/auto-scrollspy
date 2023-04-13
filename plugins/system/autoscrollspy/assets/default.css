@@ -1,0 +1,128 @@
+ul.autoss-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+ul.autoss-nav li {
+  padding: 0;
+  margin: 0;
+}
+ul.autoss-nav li a {
+  display: block;
+  padding: 5px 10px;
+  margin: 0;
+  text-decoration: none;
+}
+ul.autoss-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+ul.autoss-nav ul li {
+  padding-left: 10px;
+  margin: 0;
+}
+ul.autoss-nav ul li a {
+  display: block;
+  padding: 5px 10px;
+  margin: 0;
+  text-decoration: none;
+}
+
+.autoss-floatcontainer {
+  position: fixed;
+  background: white;
+  z-index: 1000;
+}
+.autoss-floatcontainer .autoss-paneltitle {
+  padding: 5px;
+}
+
+.asscolors-dark {
+  background: #333;
+}
+.asscolors-dark a {
+  color: white;
+}
+.asscolors-dark li a.active {
+  background: #000000;
+  font-weight: bold;
+}
+.asscolors-dark .autoss-paneltitle {
+  color: white;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(0deg, rgb(0, 0, 0) 0%, rgba(255, 255, 255, 0) 71%);
+}
+
+.asscolors-light {
+  background: #eeeeee;
+}
+.asscolors-light a {
+  color: black;
+}
+.asscolors-light li a.active {
+  background: #c4c4c4;
+  font-weight: bold;
+}
+.asscolors-light .autoss-paneltitle {
+  color: rgb(2, 2, 2);
+  background: white;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.0823529412);
+}
+
+.asscolors-default li a.active {
+  background: #c4c4c4;
+  font-weight: bold;
+}
+
+.autoss-floatcontainer.asscolors-light, .autoss-floatcontainer.asscolors-default {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.23);
+}
+
+.autoss-float-toggle.asscolors-dark {
+  background: #333;
+  color: white;
+}
+.autoss-float-toggle.asscolors-dark:hover {
+  background: #000000;
+}
+
+.autoss-float-toggle.asscolors-light {
+  background: white;
+  color: black;
+}
+.autoss-float-toggle.asscolors-light:hover {
+  background: #c4c4c4;
+}
+
+.autoss-float-toggle {
+  min-width: 32px;
+  min-height: 40px;
+}
+
+.as-float-left {
+  left: 0;
+}
+
+.as-float-right {
+  right: 0;
+}
+
+.autoss-collapsed {
+  display: none;
+}
+
+.autoss-float-toggle {
+  position: fixed;
+  padding: 5px;
+  cursor: pointer;
+  z-index: 1001;
+  transition: all 0.3s ease;
+}
+
+.autoss-togglehidden {
+  display: none;
+}
+
+/*# sourceMappingURL=default.css.map */

@@ -1,0 +1,19 @@
+#ignore everything
+*
+*/
+
+!plugins/
+!plugins/system/
+!plugins/system/autoscrollspy/
+!plugins/system/autoscrollspy/**
+
+!modules/
+!modules/mod_autoscrollspy/
+!modules/mod_autoscrollspy/**
+
+!.gitignore
+!readme.md
+
+
+
+
