@@ -11,9 +11,8 @@
 	<description>MOD_AUTOSCROLLSPY_XML_DESCRIPTION</description>
 	<namespace path="src">Joomla\Module\AutoScrollSpy</namespace>
 	<files>
-		<folder module="mod_autoscrollspy">src</folder>
-		<folder>services</folder>
-		<folder>tmpl</folder>
+		<file module="mod_autoscrollspy">mod_autoscrollspy.php</file>
+		<file>mod_autoscrollspy.xml</file>
 	</files>
 	<languages>
 		<language tag="en-GB">language/en-GB/mod_autoscrollspy.ini</language>

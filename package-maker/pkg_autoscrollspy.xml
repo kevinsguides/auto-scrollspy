@@ -7,7 +7,8 @@
     <version>1.00</version>
     <url>https://kevinsguides.com</url>
     <packager>KevinsGuides</packager>
-    <description>The first version of AutoScrollSpy for j4</description>
+    <description>The first version of AutoScrollSpy for j4. You should probably go find and enable the plugin.</description>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <files>
         <file type="module" id="mod_autoscrollspy">mod_autoscrollspy.zip</file>
         <file type="plugin" id="autoscrollspy" group="system">plg_autoscrollspy.zip</file>    
