@@ -9,7 +9,6 @@
 	<authorUrl>https://kevinsguides.com</authorUrl>
 	<version>1.0.0</version>
 	<description>PLG_SYSTEM_AUTO_SCROLLSPY_XML_DESC</description>
-	<namespace path="src">Joomla\Plugin\System\AutoScrollSpy</namespace>
 	<files>
 		<filename plugin="autoscrollspy">autoscrollspy.php</filename>
         <folder>assets</folder>

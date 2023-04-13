@@ -67,7 +67,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
 
         //check if module is enabled
-        if(JModuleHelper::isEnabled('mod_autoscrollspy') == false){
+        if(JModuleHelper::isEnabled('mod_autoscrollspy') == false && $render_location != 'floatpanel'){
             return;
         }
         //get contents of page

@@ -9,7 +9,6 @@
 	<authorUrl>https://kevinsguides.com</authorUrl>
 	<version>1.0.0</version>
 	<description>MOD_AUTOSCROLLSPY_XML_DESCRIPTION</description>
-	<namespace path="src">Joomla\Module\AutoScrollSpy</namespace>
 	<files>
 		<file module="mod_autoscrollspy">mod_autoscrollspy.php</file>
 		<file>mod_autoscrollspy.xml</file>

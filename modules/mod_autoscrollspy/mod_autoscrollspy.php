@@ -5,6 +5,6 @@
 * this module displays the article table of contents from the autoscrollspy plugin
 */
 
-use Joomla\CMS\Factory;
+defined ( '_JEXEC' ) or die;
 
 ?>
