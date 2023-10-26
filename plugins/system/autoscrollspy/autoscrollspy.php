@@ -6,13 +6,21 @@
 defined ('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
-
+use Joomla\CMS\Helper\ModuleHelper;
+use Joomla\CMS\Filter\OutputFilter as FilterOutput;
+use Joomla\CMS\Language\Text;
 
 
 class PlgSystemAutoScrollSpy extends CMSPlugin
 {
 
     public function onBeforeRender(){
+
+        $app = Factory::getApplication();
+        //make sure we're on front end
+        if($app->isClient('administrator')){
+            return;
+        }
 
         $params = $this->params;
         $enable_scrollspy = $params->get('enable_scrollspy', 1);
@@ -24,14 +32,15 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         $render_location = $params->get('render_location', 'module');
         $colors = $params->get('colors', 'asscolors-default');
 
-        $app = Factory::getApplication();
+
 
         $wam = $app->getDocument()->getWebAssetManager();
 
-        $wam->registerAndUseStyle('plg_system_autoscrollspy', '/plugins/system/autoscrollspy/assets/default.css', [], ['version' => 'auto']);
+        $wam->registerAndUseStyle('plg_autoss.styles','plugins/system/autoscrollspy/media/autoscrollspy.css');
         
+
         if($enable_scrollspy == 1){
-            $wam->registerAndUseScript('plg_system_autoscrollspy', '/plugins/system/autoscrollspy/assets/autoscrollspy.js', [], ['defer' => 'true']);
+            $wam->registerAndUseScript('plg_autoss.script','plugins/system/autoscrollspy/media/autoscrollspy.js');
         }
         
   
@@ -72,11 +81,11 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
 
         //check if module is enabled
-        if(JModuleHelper::isEnabled('mod_autoscrollspy') == false && $render_location != 'floatpanel'){
+        if(ModuleHelper::isEnabled('mod_autoscrollspy') == false && $render_location != 'floatpanel'){
             return;
         }
         //get contents of page
-        $article = JFactory::getApplication()->getDocument()->getBuffer('component');
+        $article = Factory::getApplication()->getDocument()->getBuffer('component');
 
         $count = 0;
 
@@ -95,7 +104,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
 
         //replace contents of module with a message
-        $module = JModuleHelper::getModule('mod_autoscrollspy');
+        $module = ModuleHelper::getModule('mod_autoscrollspy');
 
         $headers = array();
         //create an ordered list of headers and subheaders
@@ -103,7 +112,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             $pageTitle = $app->getDocument()->getTitle();
             $menuItem = new \stdClass();
             $menuItem->title = $pageTitle;
-            $menuItem->alias = JFilterOutput::stringURLSafe($pageTitle);
+            $menuItem->alias = FilterOutput::stringURLSafe($pageTitle);
             $menuItem->level = 1;
             $headers[] = $menuItem;
             //add an empty div at top of article with that alias as id
@@ -124,7 +133,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             //set the title
             $menuItem->title = $title[1];
             //set the alias
-            $menuItem->alias = JFilterOutput::stringURLSafe($title[1]);
+            $menuItem->alias = FilterOutput::stringURLSafe($title[1]);
 
             //get level based off of if it has a $level1selector or $level2selector
             if(strpos($match, '</'.$level1selector) !== false){
@@ -191,7 +200,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             //set the title
             $title = $title[1];
             //set the alias
-            $alias = JFilterOutput::stringURLSafe($title);
+            $alias = FilterOutput::stringURLSafe($title);
 
             //if the alias is not in the match
             if(strpos($match, $alias) === false){
@@ -238,10 +247,10 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             }
 
             //load language constants
-            $lang = JFactory::getLanguage();
+            $lang = $app->getLanguage();
             $lang->load('plg_system_autoscrollspy', JPATH_ADMINISTRATOR);
 
-            $toggletext = JText::_('PLG_SYSTEM_AUTOSCROLLSPY_FLOATPANEL_COLLAPSETOGGLETEXT');
+            $toggletext = Text::_('PLG_SYSTEM_AUTOSCROLLSPY_FLOATPANEL_COLLAPSETOGGLETEXT');
 
             $toggleInnerHtml = $toggletext;
 
@@ -271,7 +280,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
 
         //update component buffer
-        JFactory::getApplication()->getDocument()->setBuffer($article, 'component');
+        Factory::getApplication()->getDocument()->setBuffer($article, 'component');
 
 
 
