@@ -6,21 +6,16 @@
 defined ('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
-use Joomla\CMS\Helper\ModuleHelper;
-use Joomla\CMS\Filter\OutputFilter as FilterOutput;
 use Joomla\CMS\Language\Text;
+use Joomla\Filter\OutputFilter;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Helper\ModuleHelper;
 
 
 class PlgSystemAutoScrollSpy extends CMSPlugin
 {
 
     public function onBeforeRender(){
-
-        $app = Factory::getApplication();
-        //make sure we're on front end
-        if($app->isClient('administrator')){
-            return;
-        }
 
         $params = $this->params;
         $enable_scrollspy = $params->get('enable_scrollspy', 1);
@@ -32,15 +27,16 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         $render_location = $params->get('render_location', 'module');
         $colors = $params->get('colors', 'asscolors-default');
 
-
+        $app = Factory::getApplication();
 
         $wam = $app->getDocument()->getWebAssetManager();
 
-        $wam->registerAndUseStyle('plg_autoss.styles','plugins/system/autoscrollspy/media/autoscrollspy.css');
-        
+        $plugin_path = URI::base().'plugins/system/autoscrollspy';
 
+        $wam->registerAndUseStyle('plg_system_autoscrollspy', $plugin_path.'/assets/default.css', [], ['version' => 'auto']);
+        
         if($enable_scrollspy == 1){
-            $wam->registerAndUseScript('plg_autoss.script','plugins/system/autoscrollspy/media/autoscrollspy.js');
+            $wam->registerAndUseScript('plg_system_autoscrollspy', $plugin_path.'/assets/autoscrollspy.js', [], ['defer' => 'true']);
         }
         
   
@@ -112,7 +108,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             $pageTitle = $app->getDocument()->getTitle();
             $menuItem = new \stdClass();
             $menuItem->title = $pageTitle;
-            $menuItem->alias = FilterOutput::stringURLSafe($pageTitle);
+            $menuItem->alias = OutputFilter::stringUrlUnicodeSlug($pageTitle);
             $menuItem->level = 1;
             $headers[] = $menuItem;
             //add an empty div at top of article with that alias as id
@@ -124,16 +120,32 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
         preg_match_all('/<'.$level1selector.'(.*?)<\/'.$level1selector.'>|<'.$level2selector.'(.*?)<\/'.$level2selector.'>/', $article, $matches);
 
+        $aliases = array();
+        foreach($matches[0] as $match){
+            //get title
+            preg_match('/>(.*?)</', $match, $title);
+            $matchAlias = OutputFilter::stringUrlUnicodeSlug($title[1]);
+            $aliases[] = $matchAlias;
+        }
+
+        //find amount of times each alias is used
+        $aliasCounts = array_count_values($aliases);
+
+        $replacementOffset = 0;
+
         //loop through matches
         foreach($matches[0] as $match){
-            //create a new object
+
             $menuItem = new \stdClass();
-            //get the title
+            //get title
             preg_match('/>(.*?)</', $match, $title);
-            //set the title
+            //set title
             $menuItem->title = $title[1];
-            //set the alias
-            $menuItem->alias = FilterOutput::stringURLSafe($title[1]);
+            $matchAlias = OutputFilter::stringUrlUnicodeSlug($title[1]);
+            //set alias
+            $menuItem->alias = $matchAlias;
+
+            $aliases[] = $matchAlias;
 
             //get level based off of if it has a $level1selector or $level2selector
             if(strpos($match, '</'.$level1selector) !== false){
@@ -142,11 +154,28 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
                 $menuItem->level = 2;
             }
 
-
-
+            //if the alias is used more than once, add a number to the end of it
+            if($aliasCounts[$matchAlias] > 1){
+                //set $menuItem->alias to # of times it has been used
+                $menuItem->alias = $matchAlias.($aliasCounts[$matchAlias]);
+                //subtract 1 from $aliasCounts[$matchAlias]
+                $aliasCounts[$matchAlias]--;
+            }
             //add to array
             $headers[] = $menuItem;
+
+            //replace <h1>title</h1> with <h1 id="alias">title</h1>
+
+           if($menuItem->level == 1){
+            $article = substr_replace($article, '<'.$level1selector.' id="'.$menuItem->alias.'">'.$menuItem->title.'</'.$level1selector.'>', strpos($article, $match)+$replacementOffset, strlen($match));
+           }
+            else{
+            $article = substr_replace($article, '<'.$level2selector.' id="'.$menuItem->alias.'">'.$menuItem->title.'</'.$level2selector.'>', strpos($article, $match)+$replacementOffset, strlen($match));
+            }
+            
         }
+
+
 
         //create the html for the module
         //it's an ol with lids and levels
@@ -183,39 +212,13 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
                     $html .= '</'.$li.'>';
                 }
                
-
             }
-            //
+
         }
 
         $html .= '</'.$list_elem.'>';
 
         $html = '<div class="'.$colors.'">'.$html.'</div>';
-
-
-        //look through the original matches add missing ids - they should be the alias of that header
-        foreach($matches[0] as $match){
-            //get the title
-            preg_match('/>(.*?)</', $match, $title);
-            //set the title
-            $title = $title[1];
-            //set the alias
-            $alias = FilterOutput::stringURLSafe($title);
-
-            //if the alias is not in the match
-            if(strpos($match, $alias) === false){
-                //add the alias to the match
-                $newmatch = str_replace('>', ' id="'.$alias.'">', $match);
-                //replace the match in the article
-                $article = str_replace($match, $newmatch, $article);
-            }
-        }
-
-        
-
-
-
-
 
         //if render location is set to modulesticky, we will try to add sticky-top to the module container class list
 
@@ -247,7 +250,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             }
 
             //load language constants
-            $lang = $app->getLanguage();
+            $lang = Factory::getApplication()->getLanguage();
             $lang->load('plg_system_autoscrollspy', JPATH_ADMINISTRATOR);
 
             $toggletext = Text::_('PLG_SYSTEM_AUTOSCROLLSPY_FLOATPANEL_COLLAPSETOGGLETEXT');

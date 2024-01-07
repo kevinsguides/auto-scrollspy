@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="system" method="upgrade">
-	<name>plg_autoscrollspy</name>
+	<name>plg_system_autoscrollspy</name>
 	<author>Kevin Olson</author>
 	<creationDate>2023-04</creationDate>
 	<copyright>(C) 2023 Kevin Olson.</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>kevin@kevinsguides.com</authorEmail>
 	<authorUrl>https://kevinsguides.com</authorUrl>
-	<version>1.1.0</version>
+	<version>1.2</version>
 	<description>PLG_SYSTEM_AUTO_SCROLLSPY_XML_DESC</description>
 	<files>
 		<filename plugin="autoscrollspy">autoscrollspy.php</filename>
-        <folder>media</folder>
+        <folder>assets</folder>
 	</files>
-
 	<languages>
         <language tag="en-GB">language/en-GB/plg_system_autoscrollspy.ini</language>
 		<language tag="en-GB">language/en-GB/plg_system_autoscrollspy.sys.ini</language>
