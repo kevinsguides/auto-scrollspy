@@ -114,16 +114,23 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             $article_text = '<div id="'.$menuItem->alias.'"></div>'.$article_text;
         }
         //find all header elements
-        //preg_match_all('/<'.$level1selector.'(.*?)<\/'.$level1selector.'>/', $article_text, $matches);
-        //find all header elements based off $level1selector and $level2selector in the order they appear
-
         preg_match_all('/<'.$level1selector.'(.*?)<\/'.$level1selector.'>|<'.$level2selector.'(.*?)<\/'.$level2selector.'>/', $article_text, $matches);
 
         $aliases = array();
         foreach($matches[0] as $match){
             //get title
             preg_match('/>(.*?)</', $match, $title);
-            $matchAlias = OutputFilter::stringUrlUnicodeSlug($title[1]);
+
+            $matchAlias = '';
+            //check for existing id
+            if(strpos($match, 'id=') !== false){
+                
+                preg_match('/id="(.*?)"/', $match, $id);
+                $matchAlias = $id[1];
+            }else{
+                $matchAlias = OutputFilter::stringUrlUnicodeSlug($title[1]);
+            }
+
             $aliases[] = $matchAlias;
         }
 
@@ -132,7 +139,10 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
         $replacementOffset = 0;
 
+        $aliasUsage = [];
+
         //loop through matches
+        $index = 0;
         foreach($matches[0] as $match){
 
             $menuItem = new \stdClass();
@@ -140,11 +150,10 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             preg_match('/>(.*?)</', $match, $title);
             //set title
             $menuItem->title = $title[1];
-            $matchAlias = OutputFilter::stringUrlUnicodeSlug($title[1]);
+            $matchAlias = $aliases[$index];
             //set alias
             $menuItem->alias = $matchAlias;
 
-            $aliases[] = $matchAlias;
 
             //get level based off of if it has a $level1selector or $level2selector
             if(strpos($match, '</'.$level1selector) !== false){
@@ -154,12 +163,22 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             }
 
             //if the alias is used more than once, add a number to the end of it
-            if($aliasCounts[$matchAlias] > 1){
-                //set $menuItem->alias to # of times it has been used
-                $menuItem->alias = $matchAlias.($aliasCounts[$matchAlias]);
-                //subtract 1 from $aliasCounts[$matchAlias]
-                $aliasCounts[$matchAlias]--;
+            // if($aliasCounts[$matchAlias] > 1){
+            //     //set $menuItem->alias to # of times it has been used
+            //     $menuItem->alias = $matchAlias.($aliasCounts[$matchAlias]);
+            //     //subtract 1 from $aliasCounts[$matchAlias]
+            //     $aliasCounts[$matchAlias]--;
+            // }
+            if(isset($aliasUsage[$matchAlias])){
+                // Increment the usage count
+                $aliasUsage[$matchAlias]++;
+                // Append the usage count to the alias
+                $menuItem->alias = $matchAlias . '-' . $aliasUsage[$matchAlias];
+            } else {
+                // This is the first time this alias is being used
+                $aliasUsage[$matchAlias] = 1;
             }
+
             //add to array
             $headers[] = $menuItem;
 
@@ -171,6 +190,8 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             else{
             $article_text = substr_replace($article_text, '<'.$level2selector.' id="'.$menuItem->alias.'">'.$menuItem->title.'</'.$level2selector.'>', strpos($article_text, $match)+$replacementOffset, strlen($match));
             }
+
+            $index++;
             
         }
 
