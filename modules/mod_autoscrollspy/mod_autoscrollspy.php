@@ -6,5 +6,12 @@
 */
 
 defined ( '_JEXEC' ) or die;
+use Joomla\CMS\Factory;
 
+
+//check if we are on a com_content article view
+if (Factory::getApplication()->input->get('option') == 'com_content' && Factory::getApplication()->input->get('view') == 'article'):
 ?>
+<div id="autoscrollspybykg">
+</div>
+<?php endif; ?>

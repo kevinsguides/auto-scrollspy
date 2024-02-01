@@ -14,6 +14,7 @@ use Joomla\CMS\Helper\ModuleHelper;
 
 class PlgSystemAutoScrollSpy extends CMSPlugin
 {
+    protected $html;
 
     public function onBeforeRender(){
 
@@ -80,6 +81,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         if(ModuleHelper::isEnabled('mod_autoscrollspy') == false && $render_location != 'floatpanel'){
             return;
         }
+
         //get contents of page
         $article = Factory::getApplication()->getDocument()->getBuffer('component');
 
@@ -236,6 +238,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         if( $render_location == 'module' || $render_location == 'modulesticky' ){
             //replace the contents of the module with the html
             $module->content = $html;
+            
         }
 
         //if render location is set to left, we will try to place it on the left side of a page in a styled cardlike container
@@ -285,10 +288,22 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         //update component buffer
         Factory::getApplication()->getDocument()->setBuffer($article, 'component');
 
-
-
+        $this->html = $html;
  
     }
+
+    public function onAfterRender()
+
+        {
+            $app = Factory::getApplication();
+            $buffer = $app->getBody();
+
+            // Replace module output based on folder name
+            $buffer = preg_replace('/<div id="autoscrollspybykg">(.*?)<\/div>/s', $this->html, $buffer);
+
+            $app->setBody($buffer);
+        }
+
 
 
 }
