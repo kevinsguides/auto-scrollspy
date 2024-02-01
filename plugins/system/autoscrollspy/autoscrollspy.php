@@ -16,7 +16,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 {
     protected $html;
 
-    public function onBeforeRender(){
+    public function onContentBeforeDisplay($context, &$article, &$params, $limitstart){
 
         $params = $this->params;
         $enable_scrollspy = $params->get('enable_scrollspy', 1);
@@ -29,16 +29,13 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         $colors = $params->get('colors', 'asscolors-default');
 
         $app = Factory::getApplication();
-
         $wam = $app->getDocument()->getWebAssetManager();
-
         $plugin_path = URI::base().'plugins/system/autoscrollspy';
-
         $wam->registerAndUseStyle('plg_system_autoscrollspy', $plugin_path.'/assets/default.css', [], ['version' => 'auto']);
-        
         if($enable_scrollspy == 1){
             $wam->registerAndUseScript('plg_system_autoscrollspy', $plugin_path.'/assets/autoscrollspy.js', [], ['defer' => 'true']);
         }
+        
         
   
         $floatpanel_position = $params->get('floatpanel_position', 'left');
@@ -83,7 +80,13 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         }
 
         //get contents of page
-        $article = Factory::getApplication()->getDocument()->getBuffer('component');
+        if($article->show_readmore == 1){
+            $article_text = $article->introtext.$article->fulltext;
+        }
+        else{
+            $article_text = $article->text;
+        }
+
 
         $count = 0;
 
@@ -92,14 +95,8 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         }
 
         //count number of $level1selector and $level2selector
-        $count += substr_count($article, '<'.$level1selector);
-        $count += substr_count($article, '<'.$level2selector);
-
-        //make sure count is greater than min_count
-        if($count < $min_count){
-            return;
-        }
-
+        $count += substr_count($article_text, '<'.$level1selector);
+        $count += substr_count($article_text, '<'.$level2selector);
 
         //replace contents of module with a message
         $module = ModuleHelper::getModule('mod_autoscrollspy');
@@ -114,13 +111,13 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             $menuItem->level = 1;
             $headers[] = $menuItem;
             //add an empty div at top of article with that alias as id
-            $article = '<div id="'.$menuItem->alias.'"></div>'.$article;
+            $article_text = '<div id="'.$menuItem->alias.'"></div>'.$article_text;
         }
         //find all header elements
-        //preg_match_all('/<'.$level1selector.'(.*?)<\/'.$level1selector.'>/', $article, $matches);
+        //preg_match_all('/<'.$level1selector.'(.*?)<\/'.$level1selector.'>/', $article_text, $matches);
         //find all header elements based off $level1selector and $level2selector in the order they appear
 
-        preg_match_all('/<'.$level1selector.'(.*?)<\/'.$level1selector.'>|<'.$level2selector.'(.*?)<\/'.$level2selector.'>/', $article, $matches);
+        preg_match_all('/<'.$level1selector.'(.*?)<\/'.$level1selector.'>|<'.$level2selector.'(.*?)<\/'.$level2selector.'>/', $article_text, $matches);
 
         $aliases = array();
         foreach($matches[0] as $match){
@@ -169,13 +166,21 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             //replace <h1>title</h1> with <h1 id="alias">title</h1>
 
            if($menuItem->level == 1){
-            $article = substr_replace($article, '<'.$level1selector.' id="'.$menuItem->alias.'">'.$menuItem->title.'</'.$level1selector.'>', strpos($article, $match)+$replacementOffset, strlen($match));
+            $article_text = substr_replace($article_text, '<'.$level1selector.' id="'.$menuItem->alias.'">'.$menuItem->title.'</'.$level1selector.'>', strpos($article_text, $match)+$replacementOffset, strlen($match));
            }
             else{
-            $article = substr_replace($article, '<'.$level2selector.' id="'.$menuItem->alias.'">'.$menuItem->title.'</'.$level2selector.'>', strpos($article, $match)+$replacementOffset, strlen($match));
+            $article_text = substr_replace($article_text, '<'.$level2selector.' id="'.$menuItem->alias.'">'.$menuItem->title.'</'.$level2selector.'>', strpos($article_text, $match)+$replacementOffset, strlen($match));
             }
             
         }
+
+        //replace com_content article view with the modified article
+        $app->input->set('view', 'article');
+        $app->input->set('option', 'com_content');
+        $app->input->set('id', $app->input->get('id'));
+        $app->input->set('catid', $app->input->get('catid'));
+        $app->input->set('Itemid', $app->input->get('Itemid'));
+        $app->input->set('lang', $app->input->get('lang'));
 
 
 
@@ -278,31 +283,23 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
 
             if($floatpanel_position == 'left'){
-                $article = $article.'<div class="autoss-float-toggle as-float-left '.$colors.$usebtnclass.'" title="'.$toggletext.'">'.$toggleInnerHtml.'</div><div class="autoss-floatcontainer as-float-left '.$colors.'" style="'.$styles.'">'.$html.'</div>';
+                $article_text = $article_text.'<div class="autoss-float-toggle as-float-left '.$colors.$usebtnclass.'" title="'.$toggletext.'">'.$toggleInnerHtml.'</div><div class="autoss-floatcontainer as-float-left '.$colors.'" style="'.$styles.'">'.$html.'</div>';
             }else{
-                $article = $article. '<div class="autoss-float-toggle as-float-right '.$colors.$usebtnclass.'" title="'.$toggletext.'">'.$toggleInnerHtml.'</div><div class="autoss-floatcontainer as-float-right '.$colors.'"  style="'.$styles.'">'.$html.'</div>';
+                $article_text = $article_text. '<div class="autoss-float-toggle as-float-right '.$colors.$usebtnclass.'" title="'.$toggletext.'">'.$toggleInnerHtml.'</div><div class="autoss-floatcontainer as-float-right '.$colors.'"  style="'.$styles.'">'.$html.'</div>';
             }
         }
 
+        if ($count < $min_count){
+            $html = '';
+        }
 
-        //update component buffer
-        Factory::getApplication()->getDocument()->setBuffer($article, 'component');
+        $article->text = $article_text;
 
-        $this->html = $html;
- 
+        //update the module
+        Factory::getApplication()->setUserState('autoscrollspy.html', $html);
     }
 
-    public function onAfterRender()
-
-        {
-            $app = Factory::getApplication();
-            $buffer = $app->getBody();
-
-            // Replace module output based on folder name
-            $buffer = preg_replace('/<div id="autoscrollspybykg">(.*?)<\/div>/s', $this->html, $buffer);
-
-            $app->setBody($buffer);
-        }
+ 
 
 
 
