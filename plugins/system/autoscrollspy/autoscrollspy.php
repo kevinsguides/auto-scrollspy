@@ -195,14 +195,6 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             
         }
 
-        //replace com_content article view with the modified article
-        $app->input->set('view', 'article');
-        $app->input->set('option', 'com_content');
-        $app->input->set('id', $app->input->get('id'));
-        $app->input->set('catid', $app->input->get('catid'));
-        $app->input->set('Itemid', $app->input->get('Itemid'));
-        $app->input->set('lang', $app->input->get('lang'));
-
 
 
         //create the html for the module
@@ -246,26 +238,30 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
         $html .= '</'.$list_elem.'>';
 
-        $html = '<div class="'.$colors.'">'.$html.'</div>';
+        $dataSticky = '';
+        $dataStickyParentLevel = '';
+        if($render_location == 'modulesticky'){
+            $dataSticky = 'data-sticky="true" ';
+            $stickyParentLevelValue = $params->get('sticky_container_parent_level', 2);
+            $dataStickyParentLevel = 'data-sticky-parent-level="'.$stickyParentLevelValue.'" ';
+        }
+
+        
+        $html = '<div class="'.$colors.'" id="autoScrollSpyContainer"'.$dataSticky.$dataStickyParentLevel.'>'.$html.'</div>';
 
         //if render location is set to modulesticky, we will try to add sticky-top to the module container class list
 
-        if($render_location == 'modulesticky' ){
-            $modparams = json_decode($module->params);
-            if(isset($modparams->moduleclass_sfx)){
-                $modparams->moduleclass_sfx .= ' sticky-top';
-            }else{
-            $modparams->moduleclass_sfx = ' sticky-top';
-            }
-            $module->params = json_encode($modparams);
-            
-        }
+        // this no longer works in Joomla 5.
+        // if($render_location == 'modulesticky' ){
+        //     $modparams = json_decode($module->params);
+        //     if(isset($modparams->moduleclass_sfx)){
+        //         $modparams->moduleclass_sfx .= ' sticky-top';
+        //     }else{
+        //     $modparams->moduleclass_sfx = ' sticky-top';
+        //     }
+        //     $module->params = json_encode($modparams);
+        // }
 
-        if( $render_location == 'module' || $render_location == 'modulesticky' ){
-            //replace the contents of the module with the html
-            $module->content = $html;
-            
-        }
 
         //if render location is set to left, we will try to place it on the left side of a page in a styled cardlike container
         if($render_location == 'floatpanel'){

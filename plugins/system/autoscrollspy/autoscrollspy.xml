@@ -125,10 +125,18 @@
                 </field>
 
                 <field
-                name="fieldsticky_note"
+                name="fieldsticky_note_config"
                 type="note"
-                label="PLG_SYSTEM_AUTO_SCROLLSPY_FIELDSTICKY_NOTE"
-                description="PLG_SYSTEM_AUTO_SCROLLSPY_FIELDSTICKY_NOTE_DESC"
+                label="PLG_SYSTEM_AUTO_SCROLLSPY_FIELDSTICKY_NOTE_CONFIG"
+                description="PLG_SYSTEM_AUTO_SCROLLSPY_FIELDSTICKY_NOTE_CONFIG_DESC"
+                showon="render_location:modulesticky"
+                />
+                <field
+                name="sticky_container_parent_level"
+                type="number"
+                label="PLG_SYSTEM_AUTO_SCROLLSPY_STICKY_CONTAINER_PARENT_LEVEL"
+                description="PLG_SYSTEM_AUTO_SCROLLSPY_STICKY_CONTAINER_PARENT_LEVEL_DESC"
+                default="2"
                 showon="render_location:modulesticky"
                 />
 

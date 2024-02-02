@@ -2,8 +2,9 @@
 //add event listener for dom ready
 document.addEventListener("DOMContentLoaded", function(event) {
 
+
+
     //look for ul.autoss-nav
-    
     var nav = document.querySelector('.autoss-nav');
     //this var is equal to nav data-listelem
     var listElem = nav.getAttribute('data-listelem');
@@ -125,4 +126,28 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     }
 
+    attemptForceSticky();
+
 });
+
+function attemptForceSticky(){
+    const autoss = document.querySelector('#autoScrollSpyContainer');
+    //validate data-sticky="true"
+    const sticky = autoss.getAttribute('data-sticky');
+    if(sticky != 'true'){
+        return;
+    }
+    //get from data-parentlevel
+    const parentLevel = autoss.getAttribute('data-sticky-parent-level');
+    //find the parent element parentLevels up from autoss
+    let parent = autoss;
+    for(let i = 0; i < parentLevel; i++){
+        parent = parent.parentElement;
+    }
+
+    //set style of parent to sticky
+    parent.style.position = 'sticky';
+    parent.style.top = '0';
+    parent.style.zIndex = '1000';
+
+}
