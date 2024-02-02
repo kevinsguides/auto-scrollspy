@@ -10,6 +10,9 @@ use Joomla\CMS\Language\Text;
 use Joomla\Filter\OutputFilter;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Helper\ModuleHelper;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Registry\Registry;
+
 
 
 class PlgSystemAutoScrollSpy extends CMSPlugin
@@ -18,15 +21,19 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
     public function onContentBeforeDisplay($context, &$article, &$params, $limitstart){
 
-        $params = $this->params;
-        $enable_scrollspy = $params->get('enable_scrollspy', 1);
-        $top_is_title = $params->get('top_is_title', 1);
-        $level1selector = $params->get('level1selector', 'h2');
-        $level2selector = $params->get('level2selector', 'h3');
-        $min_count = $params->get('min_count', 3);
-        $style = $params->get('style', 'default');
-        $render_location = $params->get('render_location', 'module');
-        $colors = $params->get('colors', 'asscolors-default');
+        
+        //get params for plugin from plugin settings without new registery
+        $plugin = PluginHelper::getPlugin('system', 'autoscrollspy');
+        $this->params = new Registry($plugin->params);
+
+        $enable_scrollspy = $this->params->get('enable_scrollspy', 1);
+        $top_is_title = $this->params->get('top_is_title', 1);
+        $level1selector = $this->params->get('level1selector', 'h2');
+        $level2selector = $this->params->get('level2selector', 'h3');
+        $min_count = $this->params->get('min_count', 3);
+        $style = $this->params->get('style', 'default');
+        $render_location = $this->params->get('render_location', 'module');
+        $colors = $this->params->get('colors', 'asscolors-default');
 
         $app = Factory::getApplication();
         $wam = $app->getDocument()->getWebAssetManager();
@@ -38,12 +45,12 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         
         
   
-        $floatpanel_position = $params->get('floatpanel_position', 'left');
-        $floatpanel_width = $params->get('floatpanel_width', '200px');
-        $floatpanel_offset_top = $params->get('floatpanel_offset_top', '250px');
-        $floatpanel_paneltitle = $params->get('floatpanel_paneltitle', '');
-        $floatpanel_autocollapse_width = $params->get('floatpanel_autocollapse_width', '768');
-        $floatpanel_collapse_toggler_type = $params->get('floatpanel_collapse_toggler_type', 'fa-button');
+        $floatpanel_position = $this->params->get('floatpanel_position', 'left');
+        $floatpanel_width = $this->params->get('floatpanel_width', '200px');
+        $floatpanel_offset_top = $this->params->get('floatpanel_offset_top', '250px');
+        $floatpanel_paneltitle = $this->params->get('floatpanel_paneltitle', '');
+        $floatpanel_autocollapse_width = $this->params->get('floatpanel_autocollapse_width', '768');
+        $floatpanel_collapse_toggler_type = $this->params->get('floatpanel_collapse_toggler_type', 'fa-button');
 
         
 
@@ -80,12 +87,9 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         }
 
         //get contents of page
-        if($article->show_readmore == 1){
-            $article_text = $article->introtext.$article->fulltext;
-        }
-        else{
+
             $article_text = $article->text;
-        }
+        
 
 
         $count = 0;
@@ -242,7 +246,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         $dataStickyParentLevel = '';
         if($render_location == 'modulesticky'){
             $dataSticky = 'data-sticky="true" ';
-            $stickyParentLevelValue = $params->get('sticky_container_parent_level', 2);
+            $stickyParentLevelValue = $this->params->get('sticky_container_parent_level', 2);
             $dataStickyParentLevel = 'data-sticky-parent-level="'.$stickyParentLevelValue.'" ';
         }
 
@@ -264,7 +268,8 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
 
         //if render location is set to left, we will try to place it on the left side of a page in a styled cardlike container
-        if($render_location == 'floatpanel'){
+        //and count > min_count
+        if($render_location == 'floatpanel' && $count >= $min_count){
 
             $styles = '';
             $styles .= 'width:'.$floatpanel_width.';';
