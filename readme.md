@@ -1,5 +1,5 @@
 # Auto Scroll Spy
-## A Joomla 4 Extension
+## A Joomla 4/5 Extension
 
 This extension will allow you to generate a table of contents with scrollspy for your articles automatically.
 I know the acronym is A.S.S. That wasn't intentional but I'm too lazy to change it.
