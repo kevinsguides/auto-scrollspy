@@ -108,14 +108,16 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         $headers = array();
         //create an ordered list of headers and subheaders
         if($top_is_title == 1){
-            $pageTitle = $app->getDocument()->getTitle();
+            //get title of article
+            $pageTitle = $article->title;
             $menuItem = new \stdClass();
             $menuItem->title = $pageTitle;
             $menuItem->alias = OutputFilter::stringUrlUnicodeSlug($pageTitle);
             $menuItem->level = 1;
             $headers[] = $menuItem;
             //add an empty div at top of article with that alias as id
-            $article_text = '<div id="'.$menuItem->alias.'"></div>'.$article_text;
+            //$article_text = '<div id="'.$menuItem->alias.'"></div>'.$article_text;
+            echo '<div id="'.$menuItem->alias.'"></div>';
         }
         //find all header elements
         preg_match_all('/<'.$level1selector.'(.*?)<\/'.$level1selector.'>|<'.$level2selector.'(.*?)<\/'.$level2selector.'>/', $article_text, $matches);
