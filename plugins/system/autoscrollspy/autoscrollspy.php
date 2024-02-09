@@ -61,8 +61,8 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         $list_elem = 'ul';
         $li = 'li';
         $list_elem_class = '';
-        $a_class = '';
-        $a2_class = '';
+        $a_class = 'autoss-local-link ';
+        $a2_class = 'autoss-local-link ';
         if($style == 'ol'){
             $list_elem = 'ol';
         }
@@ -70,8 +70,8 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             $list_elem = 'nav';
             $li = 'span';
             $list_elem_class = 'nav nav-pills flex-column';
-            $a_class = 'nav-link autoss-local-link';
-            $a2_class = 'nav-link autoss-local-link ms-2';
+            $a_class .= 'nav-link';
+            $a2_class .= 'nav-link ms-2 ';
         }
 
         //make sure we're on an article page
