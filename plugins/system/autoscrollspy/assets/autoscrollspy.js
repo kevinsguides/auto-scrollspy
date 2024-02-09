@@ -151,3 +151,30 @@ function attemptForceSticky(){
     parent.style.zIndex = '1000';
 
 }
+
+
+//handle offset scrollOffsetTop attribute given from params
+//whenever a local link is clicked, we need to scroll to the right position
+//joomla provides scrollOffsetTop as const so we can use that
+//add event listener to all .autoss-local-link  (they are a elems)
+
+if(scrollOffsetTop != 0){
+    const localLinks = document.querySelectorAll('.autoss-local-link');
+    for (var i = 0; i < localLinks.length; i++) {
+        localLinks[i].addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('clicked'   + this.getAttribute('href'));
+            var href = this.getAttribute('href');
+            var id = href.replace('#', '');
+            var el = document.getElementById(id);
+            var pos = el.offsetTop - scrollOffsetTop;
+            window.scrollTo({
+                top: pos,
+                behavior: 'smooth'
+            });
+        });
+    }
+}
+
+
+

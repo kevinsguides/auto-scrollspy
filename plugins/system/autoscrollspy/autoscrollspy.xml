@@ -46,6 +46,17 @@
                 <option value="1">JYES</option>
                 <option value="0">JNO</option>
                 </field>
+
+                <field
+                name="scroll_offset_top"
+                type="number"
+                label="PLG_SYSTEM_AUTO_SCROLLSPY_SCROLL_OFFSET_TOP"
+                description="PLG_SYSTEM_AUTO_SCROLLSPY_SCROLL_OFFSET_TOP_DESC"
+                default="0"
+                required="true"
+                />
+
+
                 <field
                 name="level1selector"
                 type="list"

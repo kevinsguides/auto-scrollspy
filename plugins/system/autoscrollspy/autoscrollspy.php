@@ -22,7 +22,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
     public function onContentBeforeDisplay($context, &$article, &$params, $limitstart){
 
         
-        //get params for plugin from plugin settings without new registery
+        //setup
         $plugin = PluginHelper::getPlugin('system', 'autoscrollspy');
         $this->params = new Registry($plugin->params);
 
@@ -43,8 +43,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             $wam->registerAndUseScript('plg_system_autoscrollspy', $plugin_path.'/assets/autoscrollspy.js', [], ['defer' => 'true']);
         }
         
-        
-  
+        /* floatpanel props*/
         $floatpanel_position = $this->params->get('floatpanel_position', 'left');
         $floatpanel_width = $this->params->get('floatpanel_width', '200px');
         $floatpanel_offset_top = $this->params->get('floatpanel_offset_top', '250px');
@@ -52,7 +51,12 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         $floatpanel_autocollapse_width = $this->params->get('floatpanel_autocollapse_width', '768');
         $floatpanel_collapse_toggler_type = $this->params->get('floatpanel_collapse_toggler_type', 'fa-button');
 
-        
+        // handle offset of scroll to heading (pass to js)
+        $scroll_offset_top = $this->params->get('scroll_offset_top', '0');
+        $wam->addInlineScript('
+            const scrollOffsetTop = '.$scroll_offset_top.';
+        ', ['type' => 'text/javascript']);
+
 
         $list_elem = 'ul';
         $li = 'li';
@@ -66,8 +70,8 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             $list_elem = 'nav';
             $li = 'span';
             $list_elem_class = 'nav nav-pills flex-column';
-            $a_class = 'nav-link';
-            $a2_class = 'nav-link ms-2';
+            $a_class = 'nav-link autoss-local-link';
+            $a2_class = 'nav-link autoss-local-link ms-2';
         }
 
         //make sure we're on an article page
@@ -88,10 +92,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
         //get contents of page
 
-            $article_text = $article->text;
-        
-
-
+        $article_text = $article->text;
         $count = 0;
 
         if($top_is_title == 1){
