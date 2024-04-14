@@ -38,7 +38,8 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         $app = Factory::getApplication();
         $wam = $app->getDocument()->getWebAssetManager();
         $webAssetReg = $wam->getRegistry();
-        $webAssetReg->addRegistryFile('media/plg_system_autoscrollspy/joomla.asset.json');
+        //$webAssetReg->addRegistryFile('media/plg_system_autoscrollspy/joomla.asset.json');
+        $webAssetReg->addExtensionRegistryFile('plg_system_autoscrollspy');
         $plugin_path = URI::base().'plugins/system/autoscrollspy';
         $wam->useStyle('plg_system_autoscrollspy.default');
         if($enable_scrollspy == 1){

@@ -219,6 +219,7 @@
                 label="PLG_SYSTEM_AUTO_SCROLLSPY_FLOATPANEL_COLLAPSE_TOGGLER_TEXT"
                 description="PLG_SYSTEM_AUTO_SCROLLSPY_FLOATPANEL_COLLAPSE_TOGGLER_TEXT_DESC"
                 default=""
+                showon="render_location:floatpanel"
                 />
 
 			</fieldset>
