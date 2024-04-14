@@ -80,6 +80,8 @@ ul.autoss-nav ul li a {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.23);
 }
 
+
+
 .autoss-float-toggle.asscolors-dark {
   background: #333;
   color: white;
@@ -119,7 +121,13 @@ ul.autoss-nav ul li a {
   cursor: pointer;
   z-index: 1001;
   transition: all 0.3s ease;
+
 }
+.autoss-float-toggle.btn{
+  display: flex;
+  align-items: center;
+}
+
 .autoss-float-toggle.asscolors-dark.as-float-left {
   border-radius: 0 10px 10px 0;
 }
@@ -128,7 +136,7 @@ ul.autoss-nav ul li a {
 }
 .autoss-float-toggle i {
   font-size: 2em;
-  padding: 5px;
+  padding: 10px;
 }
 
 .autoss-togglehidden {

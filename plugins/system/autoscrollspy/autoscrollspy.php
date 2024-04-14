@@ -37,10 +37,12 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
 
         $app = Factory::getApplication();
         $wam = $app->getDocument()->getWebAssetManager();
+        $webAssetReg = $wam->getRegistry();
+        $webAssetReg->addRegistryFile('media/plg_system_autoscrollspy/joomla.asset.json');
         $plugin_path = URI::base().'plugins/system/autoscrollspy';
-        $wam->registerAndUseStyle('plg_system_autoscrollspy', $plugin_path.'/assets/default.css', [], ['version' => 'auto']);
+        $wam->useStyle('plg_system_autoscrollspy.default');
         if($enable_scrollspy == 1){
-            $wam->registerAndUseScript('plg_system_autoscrollspy', $plugin_path.'/assets/autoscrollspy.js', [], ['defer' => 'true']);
+            $wam->useScript('plg_system_autoscrollspy.autoscrollspy');
         }
         
         /* floatpanel props*/
@@ -50,6 +52,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         $floatpanel_paneltitle = $this->params->get('floatpanel_paneltitle', '');
         $floatpanel_autocollapse_width = $this->params->get('floatpanel_autocollapse_width', '768');
         $floatpanel_collapse_toggler_type = $this->params->get('floatpanel_collapse_toggler_type', 'fa-button');
+        $toggletext = $this->params->get('floatpanel_collapse_toggler_text', '');
 
         // handle offset of scroll to heading (pass to js)
         $scroll_offset_top = $this->params->get('scroll_offset_top', '0');
@@ -286,31 +289,39 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
             $lang = Factory::getApplication()->getLanguage();
             $lang->load('plg_system_autoscrollspy', JPATH_ADMINISTRATOR);
 
-            $toggletext = Text::_('PLG_SYSTEM_AUTOSCROLLSPY_FLOATPANEL_COLLAPSETOGGLETEXT');
+
+            $toggleTitleText = $toggletext;
+            $toggletext = '<span class="auss-toggletext">'.$toggletext.'</span>';
 
             $toggleInnerHtml = $toggletext;
 
 
-
             if($floatpanel_collapse_toggler_type == 'fa-button'){
-                $toggleInnerHtml = '<i class="fas fa-ellipsis-v"></i>';
+                $toggleInnerHtml = '<i class="fas fa-ellipsis-v"></i> '.$toggletext;
             }
             else if($floatpanel_collapse_toggler_type == 'fa-bars-button'){
-                $toggleInnerHtml = '<i class="fas fa-bars"></i>';
+                $toggleInnerHtml = '<i class="fas fa-bars"></i>'.$toggletext;
+            }
+            else if($floatpanel_collapse_toggler_type == 'fa-svg'){
+                $toggleInnerHtml = '<img src="media/plg_system_autoscrollspy/images/fa-list-solid.svg" alt="ellipsis" style="width: 32px;"/> '.$toggletext;
             }
 
             $usebtnclass = '';
             if($colors == 'asscolors-default'){
                 $usebtnclass = ' btn btn-primary';
             }
-
-            
+            else if($colors == 'asscolors-light'){
+                $usebtnclass = ' btn btn-light';
+            }
+            else if($colors == 'asscolors-dark'){
+                $usebtnclass = ' btn btn-dark';
+            }
 
 
             if($floatpanel_position == 'left'){
-                $article_text = $article_text.'<div class="autoss-float-toggle as-float-left '.$colors.$usebtnclass.'" title="'.$toggletext.'">'.$toggleInnerHtml.'</div><div class="autoss-floatcontainer as-float-left '.$colors.'" style="'.$styles.'">'.$html.'</div>';
+                $article_text = $article_text.'<div class="autoss-float-toggle as-float-left '.$colors.$usebtnclass.'" title="'.$toggleTitleText.'">'.$toggleInnerHtml.'</div><div class="autoss-floatcontainer as-float-left '.$colors.'" style="'.$styles.'">'.$html.'</div>';
             }else{
-                $article_text = $article_text. '<div class="autoss-float-toggle as-float-right '.$colors.$usebtnclass.'" title="'.$toggletext.'">'.$toggleInnerHtml.'</div><div class="autoss-floatcontainer as-float-right '.$colors.'"  style="'.$styles.'">'.$html.'</div>';
+                $article_text = $article_text. '<div class="autoss-float-toggle as-float-right '.$colors.$usebtnclass.'" title="'.$toggleTitleText.'">'.$toggleInnerHtml.'</div><div class="autoss-floatcontainer as-float-right '.$colors.'"  style="'.$styles.'">'.$html.'</div>';
             }
         }
 

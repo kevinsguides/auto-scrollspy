@@ -20,5 +20,10 @@
 !readme.md
 !autossupdates.xml
 
+!media/
+!media/plg_system_autoscrollspy/
+!media/plg_system_autoscrollspy/**
+
+
 
 

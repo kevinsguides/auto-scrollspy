@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "plg_system_autoscrollspy",
+  "version": "4.0.0",
+  "description": "AutoScrollSpy Plugin FE Media Files",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "plg_system_autoscrollspy.default",
+      "type": "style",
+      "uri": "plg_system_autoscrollspy/default.css"
+    },
+    {
+      "name": "plg_system_autoscrollspy.autoscrollspy",
+      "type": "script",
+      "uri": "plg_system_autoscrollspy/autoscrollspy.js"
+    }
+  ]
+}
