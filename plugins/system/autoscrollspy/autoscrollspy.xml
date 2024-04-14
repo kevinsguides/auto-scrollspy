@@ -16,6 +16,7 @@
         <folder>js</folder>
         <folder>css</folder>
         <folder>images</folder>
+        <filename>joomla.asset.json</filename>
     </media>
 
 	<languages>
@@ -176,6 +177,14 @@
                 showon="render_location:floatpanel"
                 />
                 <field
+                name="floatpanel_toggle_offset_top"
+                type="text"
+                label="PLG_SYSTEM_AUTO_SCROLLSPY_FLOATPANEL_TOGGLE_OFFSET_TOP"
+                description="PLG_SYSTEM_AUTO_SCROLLSPY_FLOATPANEL_TOGGLE_OFFSET_TOP_DESC"
+                default="200px"
+                showon="render_location:floatpanel"
+                />
+                <field
                 name="floatpanel_offset_top"
                 type="text"
                 label="PLG_SYSTEM_AUTO_SCROLLSPY_FLOATPANEL_OFFSET_TOP"
@@ -183,6 +192,7 @@
                 default="250px"
                 showon="render_location:floatpanel"
                 />
+
                 <field
                 name="floatpanel_paneltitle"
                 type="text"

@@ -43,7 +43,7 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         $plugin_path = URI::base().'plugins/system/autoscrollspy';
         $wam->useStyle('plg_system_autoscrollspy.default');
         if($enable_scrollspy == 1){
-            $wam->useScript('plg_system_autoscrollspy.autoscrollspy');
+            $wam->useScript('plg_system_autoscrollspy.autoscrollspy', ['defer' => true]);
         }
         
         /* floatpanel props*/
@@ -54,11 +54,13 @@ class PlgSystemAutoScrollSpy extends CMSPlugin
         $floatpanel_autocollapse_width = $this->params->get('floatpanel_autocollapse_width', '768');
         $floatpanel_collapse_toggler_type = $this->params->get('floatpanel_collapse_toggler_type', 'fa-button');
         $toggletext = $this->params->get('floatpanel_collapse_toggler_text', '');
+        $floatpanel_toggle_offset_top = $this->params->get('floatpanel_toggle_offset_top', '200px');
 
         // handle offset of scroll to heading (pass to js)
         $scroll_offset_top = $this->params->get('scroll_offset_top', '0');
         $wam->addInlineScript('
             const scrollOffsetTop = '.$scroll_offset_top.';
+            const floatPanelToggleOffsetTop = "'.$floatpanel_toggle_offset_top.'";
         ', ['type' => 'text/javascript']);
 
 

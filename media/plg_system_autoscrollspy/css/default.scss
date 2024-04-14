@@ -131,7 +131,7 @@ ul.autoss-nav{
 
 }
 
-.autoss-float-toggle{
+.autoss-float-toggle.btn{
     position: fixed;
     padding: 5px;
     cursor: pointer;
@@ -153,6 +153,11 @@ ul.autoss-nav{
         padding: 5px;
         
     }
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 
 
 }

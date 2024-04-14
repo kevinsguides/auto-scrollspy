@@ -78,12 +78,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if (floatContainer) {
 
         let floatToggler = document.querySelector('.autoss-float-toggle');
-        //calculate actual height of floatToggler from its top to its bottom
-        let floatTogglerHeight = floatToggler.offsetHeight + parseFloat(getComputedStyle(floatToggler).marginTop) + parseFloat(getComputedStyle(floatToggler).marginBottom);
 
-        console.log('floatTogglerHeight is ' + floatTogglerHeight);
-        //the top of floatToggler needs to be the top of the floatContainer minus the height of floatToggler
-        floatToggler.style.top = (floatContainer.offsetTop - floatTogglerHeight) + 'px';
+        floatToggler.style.top = floatPanelToggleOffsetTop;
 
         const autoCollapseWidth = nav.getAttribute('data-collapsewidth');
         //if it's 0px, we always collapse it
