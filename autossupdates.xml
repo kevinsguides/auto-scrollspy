@@ -2,7 +2,7 @@
 
   <update>
     <name>AutoScrollSpy Package</name>
-    <description>Latest updates for AutoSS extension. Fixed some J4 problems, issues with module loading, and force sticky feature. New offset top config option.</description>
+    <description>Latest updates for AutoSS extension.</description>
     <element>pkg_autoscrollspy</element>
     <type>package</type>
     <folder></folder>
